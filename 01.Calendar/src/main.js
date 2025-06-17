@@ -1,5 +1,4 @@
 import { router, goTo, view } from './router.js';
-
 import { yearsView } from './views/years.js';
 import { monthsView } from './views/months.js';
 import { daysView } from './views/days.js';

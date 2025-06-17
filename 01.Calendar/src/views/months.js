@@ -1,47 +1,35 @@
+import { goTo } from '../router.js';
+import displaySection from '../util.js';
 
-// views/months.js
-import { navigateTo } from '../router.js';
-import { displaySection } from '../util/dom.js';
-import { MONTHS } from '../util/constants.js';
+export function monthsView(main) {
+    const views = {};
 
-export function createMonthsView(container) {
-    const monthViews = {};
-
-    // Cache all month sections
     document.querySelectorAll('.monthCalendar').forEach(section => {
         const year = section.id.split('-')[1];
-        monthViews[year] = section;
+        views[year] = section;
 
-        // Setup event listener
-        section.addEventListener('click', (e) => handleMonthClick(e, year));
+        section.addEventListener('click', (e) => {
+            if (e.target.tagName === 'CAPTION') {
+                goTo('years');
+            } else if (e.target.tagName === 'TD' || e.target.tagName === 'DIV') {
+                const monthName = e.target.textContent.trim();
+                const monthIndex = getMonthNumber(monthName);
+                if (monthIndex) {
+                    goTo('days', year, monthIndex);
+                }
+            }
+        });
     });
 
-    function handleMonthClick(e, year) {
-        // Navigate back to years
-        if (e.target.tagName === 'CAPTION') {
-            navigateTo('years');
-            return;
-        }
-
-        // Navigate to days view
-        const monthElement = e.target.closest('.day');
-        if (monthElement) {
-            const monthName = monthElement.querySelector('.date')?.textContent.trim();
-            const monthNumber = MONTHS[monthName];
-
-            if (monthNumber) {
-                navigateTo('days', year, monthNumber);
-            }
-        }
-    }
-
-    // Return view handler
     return function showMonths(year) {
-        const section = monthViews[year];
-        if (section) {
-            displaySection(container, section);
-        } else {
-            console.error(`Year ${year} not found`);
-        }
+        displaySection(main, views[year]);
     };
+}
+
+function getMonthNumber(name) {
+    return {
+        Jan: 1, Feb: 2, Mar: 3, Apr: 4,
+        May: 5, Jun: 6, Jul: 7, Aug: 8,
+        Sep: 9, Sept: 9, Oct: 10, Nov: 11, Dec: 12
+    }[name];
 }

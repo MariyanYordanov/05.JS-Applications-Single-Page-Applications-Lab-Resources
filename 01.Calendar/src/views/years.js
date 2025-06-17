@@ -1,21 +1,15 @@
-import { navigateTo } from '../router.js';
-import { displaySection } from '../util/dom.js';
+import { goTo } from '../router.js';
+import displaySection from '../util.js';
 
-export function createYearsView(section, container) {
-
-    section.addEventListener('click', handleYearClick);
-
-    function handleYearClick(e) {
-        const yearElement = e.target.closest('.day');
-        if (yearElement) {
-            const year = yearElement.querySelector('.date')?.textContent.trim();
-            if (year && /^\d{4}$/.test(year)) {
-                navigateTo('months', year);
-            }
+export function yearsView(section, main) {
+    section.addEventListener('click', (e) => {
+        if (e.target.classList.contains('date') || e.target.classList.contains('day')) {
+            const year = e.target.textContent.trim();
+            goTo('months', year);
         }
-    }
+    });
 
     return function showYears() {
-        displaySection(container, section);
+        displaySection(main, section);
     };
 }
