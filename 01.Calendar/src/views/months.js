@@ -1,7 +1,7 @@
 import { goTo } from '../router.js';
 import displaySection from '../util.js';
 
-export function monthsView(main) {
+export function monthsView() {
     const views = {};
 
     document.querySelectorAll('.monthCalendar').forEach(section => {
@@ -22,7 +22,7 @@ export function monthsView(main) {
     });
 
     return function showMonths(year) {
-        displaySection(main, views[year]);
+        displaySection(views[year]);
     };
 }
 
